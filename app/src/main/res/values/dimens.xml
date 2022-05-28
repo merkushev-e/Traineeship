@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_32">32dp</dimen>
+    <dimen name="stripe_horizontalHeight_70">70dp</dimen>
+    <dimen name="flag_height_210">210dp</dimen>
+</resources>
