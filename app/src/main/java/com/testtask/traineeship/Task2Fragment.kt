@@ -31,6 +31,7 @@ class Task2Fragment : Fragment() {
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         handleError(throwable)
     }
+
     private val scope =
         CoroutineScope(SupervisorJob() + Dispatchers.Main + coroutineExceptionHandler)
 
