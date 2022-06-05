@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Traineeship</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_textview_stub">Error</string>
+    <string name="reload_button">Reload</string>
+    <string name="undefined_error">Undefined Error</string>
+    <string name="save">Save</string>
+    <string name="Name">Name</string>
+    <string name="LastName">Last Name</string>
 </resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/details_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="@color/white"
+    tools:context=".presentation.view.ContactDetailsFragment">
+
+    <EditText
+        android:id="@+id/contacts_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/contacts_last_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding"
+        android:paddingTop="@dimen/padding"
+        android:paddingRight="@dimen/padding"
+        android:paddingBottom="@dimen/padding" />
+
+    <EditText
+        android:id="@+id/contacts_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding"
+        android:paddingTop="@dimen/padding"
+        android:paddingRight="@dimen/padding"
+        android:paddingBottom="@dimen/padding" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/teal_200"
+        android:text="@string/save" />
+
+
+</LinearLayout>
