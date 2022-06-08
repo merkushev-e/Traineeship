@@ -85,7 +85,6 @@ class ContactListAdapter(
     fun appendItem(contact: Contact){
         data.add(contact)
         notifyDataSetChanged()
-
     }
 
 
