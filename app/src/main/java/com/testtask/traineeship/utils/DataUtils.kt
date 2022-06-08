@@ -9,7 +9,8 @@ fun mapContactEntityToContact(list: List<ContactEntity>): List<Contact> {
         Contact(
             ContactEntity.number,
             ContactEntity.name,
-            ContactEntity.lastName
+            ContactEntity.lastName,
+            ContactEntity.picId
         )
     }
 }
@@ -20,6 +21,7 @@ fun mapContactListToContactEntityList(contactList: List<Contact>): List<ContactE
             Contact.number,
             Contact.name,
             Contact.lastName,
+            Contact.picId
         )
     }
 }
@@ -29,6 +31,7 @@ fun mapContactToContactEntity(contact: Contact): ContactEntity {
         contact.number,
         contact.name,
         contact.lastName,
+        contact.picId
     )
 }
 

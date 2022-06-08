@@ -1,5 +1,6 @@
 package com.testtask.traineeship.domain
 
+import com.testtask.traineeship.data.ContactsList.createNContacts
 import com.testtask.traineeship.data.repositories.Repository
 import com.testtask.traineeship.domain.model.Contact
 

@@ -34,9 +34,18 @@ class ContactListViewModel(
 
 
     fun saveContactToDB(contact: Contact) {
-
         viewModelScope.launch(defaultDispatcher + coroutineExceptionHandler) {
             interactor.saveContact(contact)
+        }
+    }
+
+    fun saveContactsToDBAndShow(contactList: List<Contact>) {
+        viewModelScope.launch(defaultDispatcher + coroutineExceptionHandler) {
+           val job = launch {
+                interactor.saveContacts(contactList)
+            }
+            job.join()
+            launch { liveDataToObserve.postValue(interactor.getData(true))}
         }
     }
 

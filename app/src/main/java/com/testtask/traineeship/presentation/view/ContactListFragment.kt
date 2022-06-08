@@ -1,15 +1,22 @@
 package com.testtask.traineeship.presentation.view
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import android.text.Spannable
+import android.text.style.BackgroundColorSpan
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResultListener
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.testtask.traineeship.R
+import com.testtask.traineeship.data.ContactsList.createNContacts
 import com.testtask.traineeship.databinding.FragmentContactListBinding
 import com.testtask.traineeship.domain.AppState
 import com.testtask.traineeship.domain.model.Contact
@@ -30,6 +37,7 @@ class ContactListFragment : Fragment() {
     private val maxRandom = 999999999
     private var contact: Contact? = null
     private var prevNumber: String? = null
+    private var currentPosition: Int? = null
 
     private val viewModel: ContactListViewModel by viewModel()
 
@@ -79,25 +87,46 @@ class ContactListFragment : Fragment() {
 
     private fun initList() {
 
+        val itemDecoration = DividerItemDecoration(requireActivity(), LinearLayoutManager.VERTICAL);
+        ContextCompat.getDrawable(requireActivity(), R.drawable.separator)
+            ?.let { itemDecoration.setDrawable(it) }
+
         with(binding) {
             contactsRecyclerview.adapter = adapter
             contactsRecyclerview.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            contactsRecyclerview.addItemDecoration(itemDecoration)
         }
 
         floatingActionButton.setOnClickListener {
-           val num =  Random().nextInt(((maxRandom - minRandom) + 1) + minRandom)
-            contact = Contact(num.toString(), getString(R.string.Name), getString(R.string.LastName))
+            val num = Random().nextInt(((maxRandom - minRandom) + 1) + minRandom)
+            contact = Contact(
+                num.toString(),
+                getString(R.string.Name),
+                getString(R.string.LastName),
+                Random().nextInt(200)
+            )
             if (contact != null) {
                 adapter.appendItem(contact!!)
                 viewModel.saveContactToDB(contact!!)
-            }
 
+            }
+            binding.EmptyTextview.visibility = View.GONE
         }
 
         adapter.listener = ContactListAdapter.OnListItemClickListener { showDetails(it) }
         adapter.onDeleteListener = ContactListAdapter.OnListItemDeleteClickListener { data ->
             viewModel.deleteContactFromDb(data)
+        }
+        adapter.fragment = this
+        adapter.onItemLongClickListener =
+            ContactListAdapter.OnItemLongClickListener { position, data ->
+                currentPosition = position
+                contact = data
+            }
+        binding.createContacts.setOnClickListener {
+            viewModel.saveContactsToDBAndShow(createNContacts(100))
+            getData()
         }
         getData()
 
@@ -114,12 +143,14 @@ class ContactListFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 val data = appState.data
-                if (data == null || data.isEmpty()) {
+                if (data != null) {
+                    if (data.isEmpty()) {
 
-                    showErrorScreen("Ошибка")
-                } else {
-                    showViewSuccess()
-                    adapter.setData(data)
+                        showEmptyText()
+                    } else {
+                        showViewSuccess()
+                        adapter.setData(data)
+                    }
                 }
             }
 
@@ -141,6 +172,13 @@ class ContactListFragment : Fragment() {
     }
 
 
+    private fun showEmptyText() {
+        binding.EmptyTextview.visibility = View.VISIBLE
+        binding.successLayout.visibility = View.VISIBLE
+        binding.loadingFrameLayout.visibility = View.GONE
+        binding.errorLayout.visibility = View.GONE
+    }
+
     private fun showErrorScreen(error: String?) {
         showViewError()
         binding.errorTextview.text =
@@ -154,21 +192,67 @@ class ContactListFragment : Fragment() {
     }
 
     private fun showViewError() {
+        binding.EmptyTextview.visibility = View.GONE
         binding.successLayout.visibility = View.GONE
         binding.loadingFrameLayout.visibility = View.GONE
         binding.errorLayout.visibility = View.VISIBLE
     }
 
     private fun showViewSuccess() {
+        binding.EmptyTextview.visibility = View.GONE
         binding.successLayout.visibility = View.VISIBLE
         binding.loadingFrameLayout.visibility = View.GONE
         binding.errorLayout.visibility = View.GONE
     }
 
     private fun showViewLoading() {
+        binding.EmptyTextview.visibility = View.GONE
         binding.successLayout.visibility = View.GONE
         binding.loadingFrameLayout.visibility = View.VISIBLE
         binding.errorLayout.visibility = View.GONE
+    }
+
+
+
+
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        val inflater = requireActivity().menuInflater
+        inflater.inflate(R.menu.item_menu, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.action_delete -> {
+
+
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setMessage(R.string.message)
+                    .setTitle(R.string.tittle)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        currentPosition?.let {
+                            adapter.removeOnPosition(it)
+                            adapter.notifyItemRemoved(it)
+                        }
+                        contact?.let { viewModel.deleteContactFromDb(it) }
+                        Toast.makeText(context, R.string.message_note_deleted, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    .setNegativeButton(R.string.cancel) { dialog, which -> }
+                    .show()
+
+
+                return true
+            }
+        }
+        return super.onContextItemSelected(item)
     }
 
 

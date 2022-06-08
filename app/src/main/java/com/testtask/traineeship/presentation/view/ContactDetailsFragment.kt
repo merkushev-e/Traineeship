@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import coil.api.load
 import com.testtask.traineeship.R
 import com.testtask.traineeship.databinding.FragmentContactDetailsBinding
 import com.testtask.traineeship.databinding.FragmentContactListBinding
@@ -49,17 +50,21 @@ class ContactDetailsFragment : Fragment() {
             binding.contactsName.setText(contact?.name)
             binding.contactsLastName.setText(contact?.lastName)
             binding.contactsPhone.contacts_phone.setText(contact?.number)
+            binding.imageView.load("https://picsum.photos/id/${contact?.picId}/300/300")
         }
 
 
         binding.button.setOnClickListener {
 
             val contact =
-                Contact(
-                    binding.contactsPhone.text.toString(),
-                    binding.contactsName.text.toString(),
-                    binding.contactsLastName.text.toString(),
-                )
+                contact?.picId?.let { it1 ->
+                    Contact(
+                        binding.contactsPhone.text.toString(),
+                        binding.contactsName.text.toString(),
+                        binding.contactsLastName.text.toString(),
+                        it1
+                    )
+                }
 
             val bundle = Bundle().apply {
                 putParcelable(CONTACT_RESULT_BUNDLE, contact)

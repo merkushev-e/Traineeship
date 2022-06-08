@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".presentation.view.ContactListFragment">
 
 
@@ -13,11 +14,28 @@
         android:layout_height="match_parent"
         android:gravity="center">
 
+
+        <Button
+            android:id="@+id/create_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create 100 contacts"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contacts_recyclerview"
+            android:layout_marginTop="40dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/fragment_contact_list_item" />
+
+        <TextView
+            android:id="@+id/Empty_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:text="@string/empty_textview_stub" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"
@@ -64,5 +82,7 @@
             android:layout_height="wrap_content"
             android:text="@string/reload_button" />
     </LinearLayout>
+
+
 
 </FrameLayout>

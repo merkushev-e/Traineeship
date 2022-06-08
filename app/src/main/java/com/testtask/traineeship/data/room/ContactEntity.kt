@@ -8,5 +8,6 @@ data class ContactEntity(
     @PrimaryKey
     val number: String,
     val name: String,
-    val lastName: String
+    val lastName: String,
+    val picId: Int
 )

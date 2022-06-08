@@ -1,5 +1,6 @@
 package com.testtask.traineeship.data.repositories
 
+import com.testtask.traineeship.data.ContactsList
 import com.testtask.traineeship.data.room.ContactEntity
 import com.testtask.traineeship.data.room.DataSourceLocal
 import com.testtask.traineeship.domain.AppState
